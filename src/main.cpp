@@ -1,6 +1,5 @@
 #include <Arduino.h>
 #include <MsTimer2.h>
-#include <Array.h>
 #include "KeyDefines.h"
 #include "KeyboardState.h"
 #include "wire/USBWireHandler.h"
