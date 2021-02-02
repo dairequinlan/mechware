@@ -18,7 +18,8 @@ Currently contains the following functional plugins,
  * SerialWireHandler I was using this as an alternative to the USB handler while debugging, it's useful sometimes when your keyboard-in-progress DOESN'T act like a keyboard, when you screw stuff up.
 
 **TODO** 
-* find a better way of encapsulating the config somehow, at the moment it's defined in the main.cpp file and the pin configuration in the MatrixScan input device class (where, arguably, it belongs of course)
+* Setup a proper build system and move off the Arduino framework. At the moment I'm relying on Platform IO and its vscode plugin to build. Probably also involves writing some base level HID classes to replace the Arduino 'Keyboard' class which I'm currently using.
+* Find a better way of encapsulating the config somehow, at the moment it's defined in the main.cpp file and the pin configuration in the MatrixScan input device class (where, arguably, it belongs of course)
 * Currently if the plugins want to do something that involves pressing a key they have to call the wirehandler chain directly with the scancodes and key state. They should instead be sticking them onto an existing queue of keys, all of which are sent through the scan code plugins. This would facilitate some other behaviours around timing that would be useful. 
 * Allow chords to trigger plugins i.e. CTRL+ALT+P might printscreen etc etc
 
