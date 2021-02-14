@@ -4,7 +4,7 @@
 
 class SerialWireHandler : public WireHandler {
     public:
-        bool keyEvent(int state, int scanCode, KeyboardState* kbState);
+        bool inputEvent(InputEvent* event, KeyboardState* kbState);
 };
 
 #endif

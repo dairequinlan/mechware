@@ -3,6 +3,7 @@
 #include <arduino.h>
 
 #include "KeyDefines.h"
+#include "InputEvent.h"
 #include "plugin/KeyPlugin.h"
 #include "wire/WireHandler.h"
 
@@ -21,8 +22,8 @@ class KeyboardState {
         void lower();
         int getScanCode(int row, int col);    
         int getScanCode(int keyMap[NUM_ROWS][NUM_COLS], int row, int col);
-        void keyEvent(int state, int row, int col);
-        void runWireHandlers(int state, int scanCode);
+        void inputEvent(InputEvent *event);
+        void runWireHandlers(InputEvent *event);
         void wirePrint(char *str);
 
         byte keyIterCount[NUM_ROWS][NUM_COLS];

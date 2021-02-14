@@ -2,8 +2,8 @@
 #include "WireHandler.h"
 #include "SerialWireHandler.h"
 
-bool SerialWireHandler::keyEvent(int state, int scanCode, KeyboardState* kbState) {
-    Serial.print(state == KEY_PRESSED ? "PRESSED ":"RELEASED ");
-    Serial.println(scanCode);
+bool SerialWireHandler::inputEvent(InputEvent* event, KeyboardState* kbState) {
+    Serial.print(event->state == KEY_PRESSED ? "PRESSED ":"RELEASED ");
+    Serial.println(event->scancode);
     return true;
 }

@@ -5,7 +5,7 @@
 class SticKeyPlugin : public KeyPlugin {
     public :
         SticKeyPlugin(int* scanCodes, int nCodes);
-        bool keyEvent(int state, int scanCode, KeyboardState* kbState);
+        bool inputEvent(InputEvent* event, KeyboardState* kbState);
 
         int lastKeyPressed = NOK;
         int lastKeyClicked = NOK;

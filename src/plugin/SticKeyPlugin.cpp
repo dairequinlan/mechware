@@ -10,22 +10,22 @@ SticKeyPlugin::SticKeyPlugin(int* scanCodes, int nCodes):KeyPlugin(scanCodes, nC
     lastKeyPressed = NOK;
 }
 
-bool SticKeyPlugin::keyEvent(int state, int scanCode, KeyboardState* kbState) {
-    if(state == KEY_PRESSED) {
-        lastKeyPressed = scanCode;
+bool SticKeyPlugin::inputEvent(InputEvent* event, KeyboardState* kbState) {
+    if(event->state == KEY_PRESSED) {
+        lastKeyPressed = event->scancode;
         lastKeyPressedTs = millis();
     } else { // key released, this is where all the magic happens
-        if(lastKeyPressed == scanCode && (millis() - lastKeyPressedTs < STICKEY_TIMEOUT)) { // A CLICK ! A VERITABLE CLICK ! TODO check timing here
+        if(lastKeyPressed == event->scancode && (millis() - lastKeyPressedTs < STICKEY_TIMEOUT)) { // A CLICK ! A VERITABLE CLICK ! TODO check timing here
            //this is a CLICK so check see if the LAST clicked key WAS THIS ONE AS WELL
-           if(lastKeyClicked == scanCode && (millis()-lastKeyClickedTs < STICKEY_TIMEOUT)) { // ok so last click WAS ALSO this scan code i.e. double click.
-               if(isKey(scanCode)){
+           if(lastKeyClicked == event->scancode && (millis()-lastKeyClickedTs < STICKEY_TIMEOUT)) { // ok so last click WAS ALSO this scan code i.e. double click.
+               if(isKey(event->scancode)){
                    //so we have a double click on one of our keys.
                    //we return false to swallow this KEY_RELEASED
                    return false;
                }
                lastKeyClicked = NOK;
            } else {
-               lastKeyClicked = scanCode; 
+               lastKeyClicked = event->scancode; 
                lastKeyClickedTs = millis();
            }
         }

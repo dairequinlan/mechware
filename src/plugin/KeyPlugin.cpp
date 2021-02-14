@@ -17,6 +17,6 @@ bool KeyPlugin::isKey(int scanCode) {
     }
     return false;
 }
-bool KeyPlugin::keyEvent(int state, int scanCode, KeyboardState* kbState){
+bool KeyPlugin::inputEvent(InputEvent* event, KeyboardState* kbState){
     return true;
 }

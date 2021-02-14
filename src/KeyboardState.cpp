@@ -53,14 +53,17 @@ int KeyboardState::getScanCode(int keyMap[5][16], int row, int col) {
   return scanCode;
 }
 
-//This is a debounced key transition from one of the scans in the InputDevices
-void KeyboardState::keyEvent(int state, int row, int col) {
-  
-  int scanCode = getScanCode(row, col); 
-  //first plugins, and bail out of the loop and method
+//input event raised by one of the input plugins
+void KeyboardState::inputEvent(InputEvent* event) {
+//first plugins, and bail out of the loop and method
   //if any of them return false.
+  Serial.print("inputEvent ");
+  Serial.println(event->scancode);
+  Serial.send_now();
+
   for(int plugin = 0; plugin < nKeyPlugins; plugin ++) {
-    if(!keyPlugins[plugin]->keyEvent(state, scanCode, this)) {
+    if(!keyPlugins[plugin]->inputEvent(event, this)) {
+      delete event;
       return;
     }
   }
@@ -68,7 +71,8 @@ void KeyboardState::keyEvent(int state, int row, int col) {
   //because the plugins can actually call this same method and
   //in that case we want all the wire handlers run as though there
   //was a key event.
-  runWireHandlers(state, scanCode);
+  runWireHandlers(event);
+  delete event;
 }
 
 //run the wire handlers in order, bail if any of them return false;
@@ -76,9 +80,9 @@ void KeyboardState::keyEvent(int state, int row, int col) {
 //    1. the normal key event method above, 
 //    2. plugins that transmit something directly on the wire
 //    3. a couple of other methods here like the reset 
-void KeyboardState::runWireHandlers(int state, int scanCode) {
+void KeyboardState::runWireHandlers(InputEvent* event) {
   for(int wireHandler = 0; wireHandler < nWireHandlers; wireHandler++ ){
-    if(!wireHandlers[wireHandler]->keyEvent(state, scanCode, this)) {
+    if(!wireHandlers[wireHandler]->inputEvent(event, this)) {
       return;
     }
   }
@@ -90,7 +94,7 @@ void KeyboardState::clearKeyStates() {
     for (int row = 0; row < NUM_ROWS; row ++) {
       for (int col = 0; col < NUM_COLS; col++) {
         if(keyState[row][col] == KEY_PRESSED) {
-            runWireHandlers(KEY_RELEASED, getScanCode(row,col));
+            runWireHandlers(new InputEvent(KEY_RELEASED, getScanCode(row,col)));
         }
         keyIterCount[row][col] = DEBOUNCE_ITER + 1;
         keyState[row][col] = KEY_RELEASED;
@@ -114,8 +118,8 @@ void KeyboardState::resetKeyStates(int fromKeyMap[5][16], int toKeyMap[5][16]) {
          if(keyState[row][col] == KEY_PRESSED) {
             int fromKeyCode = getScanCode(fromKeyMap,row,col);
             int toKeyCode =   getScanCode(toKeyMap,row,col);
-            runWireHandlers(KEY_RELEASED, fromKeyCode);
-            runWireHandlers(KEY_PRESSED, toKeyCode);
+            runWireHandlers(new InputEvent(KEY_RELEASED, fromKeyCode));
+            runWireHandlers(new InputEvent(KEY_PRESSED, toKeyCode));
         }       
       }
     }

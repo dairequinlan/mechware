@@ -6,7 +6,7 @@ class FnPlugin:public KeyPlugin {
     public :
         FnPlugin();
         FnPlugin(int *scanCodes, int nCodes);
-        virtual bool keyEvent(int state, int scanCode, KeyboardState* kbState);
+        virtual bool inputEvent(InputEvent* event, KeyboardState* kbState);
 };
 
 #endif

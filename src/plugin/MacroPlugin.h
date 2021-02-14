@@ -1,6 +1,7 @@
 #ifndef MACRO_PLUGIN
 #define MACRO_PLUGIN
 #include "KeyPlugin.h"
+#include "../InputEvent.h"
 
 #define MACRO_TIMEOUT 200
 #define NUKE_TIMEOUT 2000
@@ -11,7 +12,7 @@ class MacroPlugin:public KeyPlugin {
     public:
         MacroPlugin();
         MacroPlugin(int *scanCodes, int nCodes);
-        bool keyEvent(int state, int scanCode, KeyboardState* kbState);
+        bool inputEvent(InputEvent* event, KeyboardState* kbState);
         void replayMacro(KeyboardState* kbState);
         void storeCode(int state, int code);
 

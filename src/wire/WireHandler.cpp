@@ -3,10 +3,6 @@
 WireHandler::WireHandler() {
 }
 
-bool WireHandler::keyEvent(int state, int scanCode, KeyboardState* kbState){
-    return true;
-}
-
-bool WireHandler::printStr(char* str, KeyboardState* kbState) {
+bool WireHandler::inputEvent(InputEvent* event, KeyboardState* kbState){
     return true;
 }

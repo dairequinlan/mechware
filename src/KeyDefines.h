@@ -12,8 +12,8 @@
 //number of iterations of identical keyscan values before we trigger a keypress
 #define DEBOUNCE_ITER 5 
 
-//milliseconds between each scan. SCAN_PERIOD * DEBOUNCE_ITER = minimum response time
-#define SCAN_PERIOD 2
+//microseconds between each scan. SCAN_PERIOD * DEBOUNCE_ITER = minimum response time
+#define SCAN_PERIOD 2000
 
 //some global key defines for function / transparent keys / custom defined etc.
 #define KEY_FUNCTION -1

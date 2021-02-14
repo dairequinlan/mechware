@@ -1,5 +1,4 @@
 #include <Arduino.h>
-#include <MsTimer2.h>
 #include "KeyDefines.h"
 #include "KeyboardState.h"
 #include "wire/USBWireHandler.h"
@@ -46,25 +45,23 @@ WireHandler* wireHandlers[] = { //new SerialWireHandler(),
 #define NUM_INPUT_DEVICES 1
 InputDevice* inputDevices[] = { new MatrixInput() };
 
-//Scan handler, runs in interrupt context, triggered by msTimer
-void scan() {
-      for(int inputDevice = 0; inputDevice < NUM_INPUT_DEVICES; inputDevice ++) {
-            if(!inputDevices[inputDevice]->scan(keyboardState)) {
-                  return;
-            }
-      }
-} 
-
 void setup() {
-  //Serial.begin(9600);
+  //Serial.begin(9600); //needs platformio.ini or teensy setup to be updated to add serial USB functionality.
   keyboardState = new KeyboardState(keyMaps, NUM_KEYMAPS, 
                                     keyPlugins, NUM_KEYPLUGINS, 
                                     wireHandlers, NUM_WIREHANDLERS);
-
-  //now set our interrupt timer for the scans.
-  MsTimer2::set(SCAN_PERIOD,scan);
-  MsTimer2::start();
 }
 
 void loop() {
+    static unsigned long tick;
+    unsigned long elapsed = micros() - tick;
+    if (elapsed >= SCAN_PERIOD) {
+        tick = elapsed - SCAN_PERIOD;
+        //now run our input handlers.
+        for(int inputDevice = 0; inputDevice < NUM_INPUT_DEVICES; inputDevice ++) {
+            if(!inputDevices[inputDevice]->scan(keyboardState)) {
+                  return;
+            }
+        }
+    }
 }

@@ -1,13 +1,13 @@
 #ifndef WIRE_HANDLER
 #define WIRE_HANDLER
+#include "../InputEvent.h"
 #include "../KeyboardState.h"
 class KeyboardState;
 
 class WireHandler {
     public :
         WireHandler();
-        virtual bool keyEvent(int state, int scanCode, KeyboardState* kbState);
-        virtual bool printStr(char* str, KeyboardState* kbState);
+        virtual bool inputEvent(InputEvent * event, KeyboardState* kbState);
 };
 
 

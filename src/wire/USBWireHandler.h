@@ -4,8 +4,7 @@
 
 class USBWireHandler : public WireHandler {
     public:
-        bool keyEvent(int state, int scanCode, KeyboardState* kbState);
-        bool printStr(char* str, KeyboardState* kbState);
+        bool inputEvent(InputEvent* event, KeyboardState* kbState);
 };
 
 #endif

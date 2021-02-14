@@ -9,7 +9,7 @@ class KeyPlugin {
         KeyPlugin();
         KeyPlugin(int *scanCodes, int nCodes);
         bool isKey(int scanCode);
-        virtual bool keyEvent(int state, int scanCode, KeyboardState* kbState);
+        virtual bool inputEvent(InputEvent* event, KeyboardState* kbState);
         int *scanCodes;
         int nCodes;
 };

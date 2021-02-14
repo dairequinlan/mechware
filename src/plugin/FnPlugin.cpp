@@ -6,9 +6,9 @@
 FnPlugin::FnPlugin(int *scanCodes, int nCodes):KeyPlugin(scanCodes, nCodes){
 }
 
-bool FnPlugin::keyEvent(int state, int scanCode, KeyboardState* kbState){
-    if(isKey(scanCode)) {
-        if(state == KEY_PRESSED) {
+bool FnPlugin::inputEvent(InputEvent* event, KeyboardState* kbState){
+    if(isKey(event->scancode)) {
+        if(event->state == KEY_PRESSED) {
             kbState->raise();
         } else {
             kbState->lower();

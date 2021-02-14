@@ -3,16 +3,11 @@
 #include "WireHandler.h"
 #include "USBWireHandler.h"
 
-bool USBWireHandler::keyEvent(int state, int scanCode, KeyboardState* kbState) {
-    if(state == KEY_PRESSED) {
-        Keyboard.press(scanCode);
+bool USBWireHandler::inputEvent(InputEvent* event, KeyboardState* kbState) {
+    if(event->state == KEY_PRESSED) {
+        Keyboard.press(event->scancode);
     } else {
-        Keyboard.release(scanCode);
+        Keyboard.release(event->scancode);
     }
-    return false;
-}
-
-bool USBWireHandler::printStr(char* str, KeyboardState* kbState) {
-    Keyboard.print(str);
     return false;
 }
