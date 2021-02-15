@@ -1,11 +1,13 @@
 #ifndef INPUT_EVENT
 #define INPUT_EVENT
 
-enum InputEventType {SCANCODE};
+enum InputEventType {FREE,SCANCODE};
 
 class InputEvent {
     public:
+        InputEvent();
         InputEvent(int state, int scancode);
+        void clear();
 
         int scancode;
         int state;

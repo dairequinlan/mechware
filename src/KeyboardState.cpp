@@ -63,7 +63,7 @@ void KeyboardState::inputEvent(InputEvent* event) {
 
   for(int plugin = 0; plugin < nKeyPlugins; plugin ++) {
     if(!keyPlugins[plugin]->inputEvent(event, this)) {
-      delete event;
+      event->clear();
       return;
     }
   }
@@ -72,7 +72,7 @@ void KeyboardState::inputEvent(InputEvent* event) {
   //in that case we want all the wire handlers run as though there
   //was a key event.
   runWireHandlers(event);
-  delete event;
+  event->clear();
 }
 
 //run the wire handlers in order, bail if any of them return false;

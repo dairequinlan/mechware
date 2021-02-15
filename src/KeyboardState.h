@@ -4,6 +4,7 @@
 
 #include "KeyDefines.h"
 #include "InputEvent.h"
+#include "InputEventPool.h"
 #include "plugin/KeyPlugin.h"
 #include "wire/WireHandler.h"
 
@@ -36,6 +37,8 @@ class KeyboardState {
         int nWireHandlers;
 
         int activeKeyMapIndex = 0;
+
+        InputEventPool inputEventPool;
 };
 
 #endif
