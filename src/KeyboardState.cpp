@@ -57,10 +57,6 @@ int KeyboardState::getScanCode(int keyMap[5][16], int row, int col) {
 void KeyboardState::inputEvent(InputEvent* event) {
 //first plugins, and bail out of the loop and method
   //if any of them return false.
-  Serial.print("inputEvent ");
-  Serial.println(event->scancode);
-  Serial.send_now();
-
   for(int plugin = 0; plugin < nKeyPlugins; plugin ++) {
     if(!keyPlugins[plugin]->inputEvent(event, this)) {
       event->clear();
