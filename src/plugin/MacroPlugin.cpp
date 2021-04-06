@@ -11,7 +11,10 @@ MacroPlugin::MacroPlugin(int *scanCodes, int nCodes):KeyPlugin(scanCodes, nCodes
 
 void MacroPlugin::replayMacro(KeyboardState* kbState) {
     for (int key = 0; key < storedIndex; key += 2) {
-        kbState->runWireHandlers(new InputEvent(stored[key],stored[key+1]));
+        InputEvent* ie = kbState->inputEventPool.getInputEvent(SCANCODE);
+        ie->state = stored[key];
+        ie->scancode = stored[key+1];
+        kbState->runWireHandlers(ie);
     }
 }
 

@@ -7,6 +7,7 @@
 #include "plugin/FnPlugin.h"
 #include "plugin/SticKeyPlugin.h"
 #include "plugin/MacroPlugin.h"
+#include "plugin/TapHoldPlugin.h"
 #include "input/InputDevice.h"
 #include "input/MatrixInput.h"
 
@@ -31,12 +32,16 @@ int keyMaps[NUM_KEYMAPS][NUM_ROWS][NUM_COLS] = {{
 int macroList[] = {KEY_SPECIAL};
 int sticKeyList[] = {KEY_FUNCTION,MODIFIERKEY_SHIFT};
 int funcKeyList[] = {KEY_FUNCTION};
+int tapHoldTap[] = {KEY_Y};
+int tapHoldHold[] = {KEY_T};
 
 #define NUM_KEYPLUGINS 1
 KeyPlugin* keyPlugins[] = {   
         //new MacroPlugin(macroList,1),
         //new SticKeyPlugin(sticKeyList,2),
-        new FnPlugin(funcKeyList,1) };
+        //new TapHoldPlugin(tapHoldTap, tapHoldHold, 1), 
+        new FnPlugin(funcKeyList,1)
+        };
 
 #define NUM_WIREHANDLERS 1
 WireHandler* wireHandlers[] = { 
@@ -47,12 +52,30 @@ WireHandler* wireHandlers[] = {
 InputDevice* inputDevices[] = { 
         new MatrixInput() };
 
-void setup() {
-  //Serial.begin(9600); //needs platformio.ini or teensy setup to be updated to add serial USB functionality.
-  keyboardState = new KeyboardState(keyMaps, NUM_KEYMAPS, 
-                                    keyPlugins, NUM_KEYPLUGINS, 
-                                    wireHandlers, NUM_WIREHANDLERS);
+
+void doInputs() {
+    //now run our input handlers.
+    for(int inputDevice = 0; inputDevice < NUM_INPUT_DEVICES; inputDevice ++) {
+        if(!inputDevices[inputDevice]->scan(keyboardState)) {
+            return;
+        }
+    }
 }
+
+void doTimerTick() {
+    InputEvent* timerEvent = keyboardState->inputEventPool.getInputEvent(TIMER);
+    timerEvent->timestamp = micros();
+    keyboardState->inputEvent(timerEvent);
+}
+
+void setup() {
+    Serial.begin(9600); //needs platformio.ini or teensy setup to be updated to add serial USB functionality.
+    keyboardState = new KeyboardState(keyMaps, NUM_KEYMAPS, 
+                                    keyPlugins, NUM_KEYPLUGINS, 
+                                    wireHandlers, NUM_WIREHANDLERS);                          
+}
+
+
 
 void loop() {
     static unsigned long scanTick = micros();
@@ -61,21 +84,13 @@ void loop() {
     //lets do a timer tick if necessary
     unsigned long elapsed = micros() - timerTick;
     if (elapsed >= TIMER_TICK_PERIOD ) {
-        timerTick = elapsed - TIMER_TICK_PERIOD;
-        InputEvent* timerEvent = keyboardState->inputEventPool.getInputEvent(TIMER);
-        timerEvent->timestamp = millis();
-        keyboardState->inputEvent(timerEvent);
+        timerTick = micros() - (elapsed - TIMER_TICK_PERIOD);
+        doTimerTick();
     }
-
     //now check if we have to run our inputs
     elapsed = micros() - scanTick;
     if (elapsed >= SCAN_PERIOD) {
-        scanTick = elapsed - SCAN_PERIOD;
-        //now run our input handlers.
-        for(int inputDevice = 0; inputDevice < NUM_INPUT_DEVICES; inputDevice ++) {
-            if(!inputDevices[inputDevice]->scan(keyboardState)) {
-                  return;
-            }
-        }
+        scanTick = micros() - (elapsed - SCAN_PERIOD);
+        doInputs();
     }
 }

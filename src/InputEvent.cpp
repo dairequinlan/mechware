@@ -13,4 +13,5 @@ InputEvent::InputEvent(int state, int scancode) {
 
 void InputEvent::clear() {
     this->type = FREE;
+    this->scancode = NOK;
 }

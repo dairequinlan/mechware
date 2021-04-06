@@ -79,9 +79,16 @@ void KeyboardState::inputEvent(InputEvent* event) {
 void KeyboardState::runWireHandlers(InputEvent* event) {
   for(int wireHandler = 0; wireHandler < nWireHandlers; wireHandler++ ){
     if(!wireHandlers[wireHandler]->inputEvent(event, this)) {
-      return;
+        //TODO have to call clear here as well because this 'runWireHandlers'
+        //     is called from everywhere to add keys to the events.
+        //     should be removed when we're adding the keys to a queue.
+        //     (which means they'll ALL go through the 'inputEvent' above)
+        event->clear();
+        return;
     }
   }
+  //ditto on comment above.
+  event->clear();
 }
 
 //clear all the keystate, if it's 'pressed' then we want 

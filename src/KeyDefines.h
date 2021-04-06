@@ -10,10 +10,10 @@
 #define NUM_ROWS 5
 #define NUM_COLS 16
 //number of iterations of identical keyscan values before we trigger a keypress
-#define DEBOUNCE_ITER 4 
+#define DEBOUNCE_ITER 4
 
 //microseconds between each scan. SCAN_PERIOD * DEBOUNCE_ITER = minimum response time
-#define SCAN_PERIOD 3000
+#define SCAN_PERIOD 2000
 //do a timer event every 20 milliseconds.
 #define TIMER_TICK_PERIOD 20000 
 

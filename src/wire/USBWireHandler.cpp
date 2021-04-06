@@ -4,10 +4,12 @@
 #include "USBWireHandler.h"
 
 bool USBWireHandler::inputEvent(InputEvent* event, KeyboardState* kbState) {
-    if(event->state == KEY_PRESSED) {
-        Keyboard.press(event->scancode);
-    } else {
-        Keyboard.release(event->scancode);
+    if(event->type == SCANCODE){
+        if(event->state == KEY_PRESSED) {
+            Keyboard.press(event->scancode);
+        } else {
+            Keyboard.release(event->scancode);
+        }
     }
     return false;
 }
