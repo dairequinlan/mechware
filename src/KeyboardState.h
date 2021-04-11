@@ -1,6 +1,11 @@
 #ifndef KEYBOARD_STATE
 #define KEYBOARD_STATE
-#include <arduino.h>
+
+#if defined(PICO)
+
+#elif defined(TEENSY) 
+ #include <arduino.h>
+#endif 
 
 #include "KeyDefines.h"
 #include "InputEvent.h"
@@ -27,8 +32,8 @@ class KeyboardState {
         void runWireHandlers(InputEvent *event);
         void wirePrint(char *str);
 
-        byte keyIterCount[NUM_ROWS][NUM_COLS];
-        byte keyState[NUM_ROWS][NUM_COLS]; 
+        unsigned char keyIterCount[NUM_ROWS][NUM_COLS];
+        unsigned char keyState[NUM_ROWS][NUM_COLS]; 
         int (*keyMaps)[NUM_ROWS][NUM_COLS];
         int nKeyMaps;
         KeyPlugin** keyPlugins;

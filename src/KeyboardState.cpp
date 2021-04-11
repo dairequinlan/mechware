@@ -1,4 +1,11 @@
+#if defined(PICO)
+ #include <stdio.h>
+ #include "tusb.h"
+#endif 
+
 #include "KeyboardState.h"
+
+int pressed[256] = {0};
 
 KeyboardState::KeyboardState(
                             int keyMaps[2][NUM_ROWS][NUM_COLS] , int nKeyMaps,
@@ -44,7 +51,7 @@ int KeyboardState::getScanCode(int row, int col) {
 
 //gets the scancode given a keymap and row/col
 //given the layer and row/col, get the appropriate scancode
-int KeyboardState::getScanCode(int keyMap[5][16], int row, int col) {
+int KeyboardState::getScanCode(int keyMap[NUM_ROWS][NUM_COLS], int row, int col) {
   int scanCode = keyMap[row][col];
   int trnsIndex = activeKeyMapIndex;
   while(scanCode == TRNS && trnsIndex >= 0) {
@@ -55,8 +62,32 @@ int KeyboardState::getScanCode(int keyMap[5][16], int row, int col) {
 
 //input event raised by one of the input plugins
 void KeyboardState::inputEvent(InputEvent* event) {
-//first plugins, and bail out of the loop and method
+  //first plugins, and bail out of the loop and method
   //if any of them return false.
+
+  #if defined(PICO)
+  if (event->type != TIMER) {
+    pressed[event->scancode] = event->state == KEY_PRESSED ? 1 : 0;
+  } else {
+    //printf("\n.", event->timestamp);
+    for (int row = 0; row < NUM_ROWS; row++) {
+      for (int col = 0; col < NUM_COLS; col++) {
+        //initial iter value is debounce + 1 so that a key transition isn't immediately detected on startup.
+        if (keyState[row][col] == KEY_PRESSED) {
+          //printf("\nKey State: %i %i",row,col);
+        }
+      }
+    }
+    //printf("pressed:");
+    for (int checked = 0; checked < 100; checked ++ ) {
+      if(pressed[checked] == 1) {
+        //printf("%i,", checked);
+      }
+    }
+    //printf("\n");
+  }
+  #endif
+
   for(int plugin = 0; plugin < nKeyPlugins; plugin ++) {
     if(!keyPlugins[plugin]->inputEvent(event, this)) {
       event->clear();
@@ -110,7 +141,7 @@ void KeyboardState::clearKeyStates() {
 //'released' state and their iter counts set to DEBOUNCE_ITER+1. 
 //Quick improvement: Only do this if the scan codes are different in the two maps. This means that 
 //any keys that are the same between the layers like the modifiers will remain pressed.
-void KeyboardState::resetKeyStates(int fromKeyMap[5][16], int toKeyMap[5][16]) {
+void KeyboardState::resetKeyStates(int fromKeyMap[NUM_ROWS][NUM_COLS], int toKeyMap[NUM_ROWS][NUM_COLS]) {
   //set the initial values on the iter count and state arrays.
   for (int row = 0; row < NUM_ROWS; row++) {
     for (int col = 0; col < NUM_COLS; col++) {
