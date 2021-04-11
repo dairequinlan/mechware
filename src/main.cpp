@@ -19,6 +19,7 @@
 #include "wire/WireHandler.h"
 #if defined(PICO)
  #include "wire/TinyUSBWireHandler.h"
+ #include "plugin/PicoRebootPlugin.h"
 #elif defined(TEENSY)
  #include "wire/USBWireHandler.h"
  #include "wire/SerialWireHandler.h" 
@@ -48,9 +49,11 @@ int keyMaps[NUM_KEYMAPS][NUM_ROWS][NUM_COLS] = {{
 //int funcKeyList[] = {KEY_FUNCTION};
 //int tapHoldTap[] = {KEY_Y};
 //int tapHoldHold[] = {KEY_T};
+int rebootList[] = {HID_KEY_ESCAPE};
 
-#define NUM_KEYPLUGINS 0//1
+#define NUM_KEYPLUGINS 1
 KeyPlugin* keyPlugins[] = {   
+        new PicoRebootPlugin(rebootList,1)
         //new MacroPlugin(macroList,1),
         //new SticKeyPlugin(sticKeyList,2),
         //new TapHoldPlugin(tapHoldTap, tapHoldHold, 1), 

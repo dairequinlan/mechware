@@ -19,6 +19,7 @@ add_executable(pico-firmware
         src/wire/WireHandler.cpp
         src/wire/TinyUSBWireHandler.cpp
         src/plugin/KeyPlugin.cpp
+        src/plugin/PicoRebootPlugin.cpp
         src/input/InputDevice.cpp
         src/input/MatrixInput.cpp
         src/usb_descriptors.c

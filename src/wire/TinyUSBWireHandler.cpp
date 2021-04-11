@@ -1,15 +1,11 @@
 #include "../KeyDefines.h"
 #include "WireHandler.h"
 #include "TinyUSBWireHandler.h"
-#include "pico/bootrom.h"
+
 
 bool TinyUSBWireHandler::inputEvent(InputEvent* event, KeyboardState* kbState) {
 
     if(event->type == SCANCODE){
-
-        if (event->scancode == HID_KEY_ESCAPE) {
-            reset_usb_boot(0, 0);
-        }
 
         if(event->state == KEY_PRESSED) {
             addKey((unsigned char)event->scancode);
