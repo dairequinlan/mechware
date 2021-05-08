@@ -10,8 +10,13 @@
 
 //TODO get these pin assignments and put them someplace else along with the
 //     key map defines and so on.
-unsigned char rowPins[NUM_ROWS] = {13,12,11,10,9};
-unsigned char colPins[NUM_COLS] = {15,14,8,7,6,5,4,3,2};
+#if defined(LEFT_HAND_SIDE)
+ unsigned char rowPins[NUM_ROWS] = {13,12,11,10,9};
+ unsigned char colPins[NUM_COLS] = {15,14,8,7,6,5,4,3,2};
+#elif defined(RIGHT_HAND_SIDE)
+ unsigned char rowPins[NUM_ROWS] = {1,2,3,4,5};
+ unsigned char colPins[NUM_COLS] = {13,12,11,10,9,8,7,6,0};
+#endif
 
 MatrixInput::MatrixInput() {
 
@@ -20,13 +25,14 @@ MatrixInput::MatrixInput() {
     for(int row=0; row < NUM_ROWS; row++) {
         gpio_init(rowPins[row]);
         gpio_set_dir(rowPins[row], GPIO_IN);
+        gpio_pull_up(rowPins[row]);
     } 
     for (int col=0; col < NUM_COLS; col++) {
         gpio_init(colPins[col]);
         gpio_set_dir(colPins[col], GPIO_IN);
         gpio_pull_up(colPins[col]);
     }
-    printf("Setup PICO pins for Matrix Scan");
+
   #elif defined(TEENSY)
     for(int row=0; row < NUM_ROWS; row++) {
           pinMode(rowPins[row], INPUT);
@@ -38,12 +44,18 @@ MatrixInput::MatrixInput() {
 }
 
 bool MatrixInput::scan(KeyboardState* keyboardState) {
+
   //First loop runs through each of the rows,
   for (int row=0; row < NUM_ROWS; row++) {
         //for each row pin, set to OUTPUT and LOW 
        #if defined(PICO)
         gpio_set_dir(rowPins[row], GPIO_OUT);
         gpio_put(rowPins[row], false);
+        //needed for some reason on the PICO, but not the teensy.
+        //not to sure what difference a 1us difference makes, but 
+        //if it's not done then the first colum often gives duplicates
+        //as the previous row pin hasn't fully reset to an input yet
+        busy_wait_us_32(1);
        #elif defined(TEENSY)
         pinMode(rowPins[row], OUTPUT);
         digitalWrite(rowPins[row], LOW);
@@ -79,12 +91,13 @@ bool MatrixInput::scan(KeyboardState* keyboardState) {
                 inputEvent->scancode = scanCode;
                 inputEvent->state = keyboardState->keyState[row][col];
                 keyboardState->inputEvent(inputEvent);
+                printf("%i %i %i\n",scanCode,row,col);
               }
             }
         }
         //now just reset the pin mode (effectively disabling it)
        #if defined(PICO)
-        gpio_put(rowPins[row],true);
+        gpio_set_dir(rowPins[row], GPIO_IN);
        #elif defined(TEENSY)
         pinMode(rowPins[row], INPUT);
        #endif

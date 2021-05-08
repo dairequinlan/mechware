@@ -65,29 +65,6 @@ void KeyboardState::inputEvent(InputEvent* event) {
   //first plugins, and bail out of the loop and method
   //if any of them return false.
 
-  #if defined(PICO)
-  if (event->type != TIMER) {
-    pressed[event->scancode] = event->state == KEY_PRESSED ? 1 : 0;
-  } else {
-    //printf("\n.", event->timestamp);
-    for (int row = 0; row < NUM_ROWS; row++) {
-      for (int col = 0; col < NUM_COLS; col++) {
-        //initial iter value is debounce + 1 so that a key transition isn't immediately detected on startup.
-        if (keyState[row][col] == KEY_PRESSED) {
-          //printf("\nKey State: %i %i",row,col);
-        }
-      }
-    }
-    //printf("pressed:");
-    for (int checked = 0; checked < 100; checked ++ ) {
-      if(pressed[checked] == 1) {
-        //printf("%i,", checked);
-      }
-    }
-    //printf("\n");
-  }
-  #endif
-
   for(int plugin = 0; plugin < nKeyPlugins; plugin ++) {
     if(!keyPlugins[plugin]->inputEvent(event, this)) {
       event->clear();
