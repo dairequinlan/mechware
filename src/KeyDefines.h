@@ -20,9 +20,13 @@
 
 //some global key defines for function / transparent keys / custom defined etc.
 #if defined(PICO)
- #define KEY_FUNCTION 0xE0 
- #define TRNS 0xE1
- #define KEY_SPECIAL 0xE2
+ #define KEY_FUNCTION 0xFF 
+ #define TRNS 0xFE
+ #define KEY_REBOOT 0xFD
+//KEY_SPECIAL should always be the lowest defined custom 'scancode'
+//as anything >= KEY_SPECIAL won't be sent via the (Tiny)USBWireHandler
+ #define KEY_SPECIAL 0xFC
+
 #elif defined(TEENSY)
  #define KEY_FUNCTION -1
  #define TRNS -2

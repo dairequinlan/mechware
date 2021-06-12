@@ -5,15 +5,15 @@
 
 bool TinyUSBWireHandler::inputEvent(InputEvent* event, KeyboardState* kbState) {
 
-    if(event->type == SCANCODE){
+    if(event->type == SCANCODE && event->scancode < KEY_SPECIAL){
 
         if(event->state == KEY_PRESSED) {
-            addKey((unsigned char)event->scancode);
+            addKey(event->scancode);
             if(event->scancode >= HID_KEY_CONTROL_LEFT && event->scancode <= HID_KEY_GUI_RIGHT) {
                 setModifier(event->scancode - HID_KEY_CONTROL_LEFT,1);
             }
         } else {        
-            removeKey((unsigned char)event->scancode);
+            removeKey(event->scancode);
             if(event->scancode >= HID_KEY_CONTROL_LEFT && event->scancode <= HID_KEY_GUI_RIGHT) {
                 setModifier(event->scancode - HID_KEY_CONTROL_LEFT,0); 
             }
@@ -37,7 +37,7 @@ bool TinyUSBWireHandler::inputEvent(InputEvent* event, KeyboardState* kbState) {
     return false;
 }
 
-void TinyUSBWireHandler::addKey(unsigned char scancode) {
+void TinyUSBWireHandler::addKey(uint8_t scancode) {
     //let's check if it's already IN the keys
     for(int i = 0; i < 6; i++) {
         if(keys[i] == scancode){
@@ -54,7 +54,7 @@ void TinyUSBWireHandler::addKey(unsigned char scancode) {
     }
 }
 
-void TinyUSBWireHandler::removeKey(unsigned char scancode) {
+void TinyUSBWireHandler::removeKey(uint8_t scancode) {
     for(int i = 0; i < 6; i++) {
         if(keys[i] == scancode) {
             keys[i] = 0;
@@ -63,6 +63,6 @@ void TinyUSBWireHandler::removeKey(unsigned char scancode) {
     }
 }
 
-void TinyUSBWireHandler::setModifier(unsigned char modifier, unsigned char state) {
+void TinyUSBWireHandler::setModifier(uint8_t modifier, uint8_t state) {
     state ? modifiers |= 1UL << modifier : modifiers &= ~(1UL << modifier);
 }

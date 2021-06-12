@@ -7,7 +7,16 @@
 InputEventPool::InputEventPool(){
 
 }
-    
+
+InputEvent* InputEventPool::getInputEvent(InputEvent event){
+    InputEvent* poolEvent = getInputEvent(event.type);
+    poolEvent->source = event.source;
+    poolEvent->state = event.state;
+    poolEvent->scancode = event.scancode;
+    poolEvent->timestamp = event.timestamp;
+    return poolEvent;
+}
+
 InputEvent* InputEventPool::getInputEvent(InputEventType type) {
     for(int c1 = 0;c1 < INPUT_EVENT_POOL_SIZE;c1 ++) {
         if(inputEvents[c1].type == FREE) {

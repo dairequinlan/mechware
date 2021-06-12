@@ -3,7 +3,7 @@
 #include "KeyDefines.h"
 #include "pico/bootrom.h"
 
-PicoRebootPlugin::PicoRebootPlugin(int *scanCodes, int nCodes):KeyPlugin(scanCodes, nCodes){
+PicoRebootPlugin::PicoRebootPlugin(uint8_t *scanCodes, int nCodes):KeyPlugin(scanCodes, nCodes){
 }
 
 bool PicoRebootPlugin::inputEvent(InputEvent* event, KeyboardState* kbState){

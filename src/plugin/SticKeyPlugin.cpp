@@ -5,7 +5,7 @@
 //click & double click keys inside this time period to lock the key until pressed again.
 #define STICKEY_TIMEOUT 200
 
-SticKeyPlugin::SticKeyPlugin(int* scanCodes, int nCodes):KeyPlugin(scanCodes, nCodes) {
+SticKeyPlugin::SticKeyPlugin(uint8_t* scanCodes, int nCodes):KeyPlugin(scanCodes, nCodes) {
     lastKeyClicked = NOK;
     lastKeyPressed = NOK;
 }

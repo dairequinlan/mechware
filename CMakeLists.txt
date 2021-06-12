@@ -37,6 +37,8 @@ target_include_directories(pico-firmware-common INTERFACE
 target_compile_options(pico-firmware-common INTERFACE -DPICO_ENTER_USB_BOOT_ON_EXIT=1)
 target_compile_definitions(pico-firmware-common INTERFACE PICO)
 
+
+
 add_executable(pico-firmware-left)
 target_link_libraries(pico-firmware-left pico-firmware-common)
 target_compile_definitions(pico-firmware-left PRIVATE LEFT_HAND_SIDE)
@@ -49,7 +51,7 @@ pico_add_extra_outputs(pico-firmware-left)
 add_executable(pico-firmware-right)
 target_link_libraries(pico-firmware-right pico-firmware-common)
 target_compile_definitions(pico-firmware-right PRIVATE RIGHT_HAND_SIDE)
-target_compile_definitions(pico-firmware-right PRIVATE PRIMARY)
+target_compile_definitions(pico-firmware-right PRIVATE SECONDARY)
 pico_enable_stdio_uart(pico-firmware-right 0)
 pico_enable_stdio_usb(pico-firmware-right 1)
 pico_add_extra_outputs(pico-firmware-right)

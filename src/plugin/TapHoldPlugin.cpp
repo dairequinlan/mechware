@@ -5,7 +5,7 @@
 //click & double click keys inside this time period to lock the key until pressed again.
 #define TAPHOLD_TIMEOUT 200000
 
-TapHoldPlugin::TapHoldPlugin(int* scanCodes, int* holdCodes, int nCodes):KeyPlugin(scanCodes, nCodes) {
+TapHoldPlugin::TapHoldPlugin(uint8_t* scanCodes, uint8_t* holdCodes, int nCodes):KeyPlugin(scanCodes, nCodes) {
 }
 
 bool TapHoldPlugin::inputEvent(InputEvent* event, KeyboardState* kbState) {

@@ -7,10 +7,10 @@ class SticKeyPlugin : public KeyPlugin {
         SticKeyPlugin(int* scanCodes, int nCodes);
         bool inputEvent(InputEvent* event, KeyboardState* kbState);
 
-        int lastKeyPressed = NOK;
-        int lastKeyClicked = NOK;
-        unsigned long lastKeyPressedTs = 0;
-        unsigned long lastKeyClickedTs = 0;
+        uint8_t lastKeyPressed = NOK;
+        uint8_t lastKeyClicked = NOK;
+        uint32_t lastKeyPressedTs = 0;
+        uint32_t lastKeyClickedTs = 0;
 
 };
 

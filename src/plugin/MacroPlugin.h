@@ -11,17 +11,17 @@ enum MacroPluginState {IDLE, ACTIVATED, RECORDING};
 class MacroPlugin:public KeyPlugin {
     public:
         MacroPlugin();
-        MacroPlugin(int *scanCodes, int nCodes);
+        MacroPlugin(uint8_t *scanCodes, int nCodes);
         bool inputEvent(InputEvent* event, KeyboardState* kbState);
         void replayMacro(KeyboardState* kbState);
-        void storeCode(int state, int code);
+        void storeCode(uint8_t state, uint8_t code);
 
         //int *stored;
-        int *stored;
+        uint8_t *stored;
         int storedIndex = 8;
         int macroSize = 0;
-        int lastKeyPressed = NOK;
-        unsigned long lastKeyPressedTs;
+        uint8_t lastKeyPressed = NOK;
+        uint32_t lastKeyPressedTs;
         MacroPluginState pluginState = IDLE;
 };
 

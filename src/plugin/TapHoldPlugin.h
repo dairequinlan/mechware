@@ -6,12 +6,12 @@ enum TapHoldState {WAITING, PRESSED, HOLDING};
 
 class TapHoldPlugin : public KeyPlugin {
     public :
-        TapHoldPlugin(int* scanCodes, int* holdCodes, int nCodes);
+        TapHoldPlugin(uint8_t* scanCodes, uint8_t* holdCodes, int nCodes);
         bool inputEvent(InputEvent* event, KeyboardState* kbState);
 
-        int holdScanCode = KEY_T;
-        unsigned long pressedTS;
-        int pressedScanCode = NOK;
+        uint8_t holdScanCode = KEY_T;
+        uint32_t pressedTS;
+        uint8_t pressedScanCode = NOK;
         
         TapHoldState state = WAITING;
 };

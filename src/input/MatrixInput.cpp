@@ -86,7 +86,7 @@ bool MatrixInput::scan(KeyboardState* keyboardState) {
                 keyboardState->keyIterCount[row][col] ++;
               } else if (keyboardState->keyIterCount[row][col] == DEBOUNCE_ITER) {
                 keyboardState->keyIterCount[row][col] ++;
-                int scanCode = keyboardState->getScanCode(row,col);
+                uint8_t scanCode = keyboardState->getScanCode(row,col);
                 InputEvent* inputEvent = keyboardState->inputEventPool.getInputEvent(SCANCODE);
                 inputEvent->scancode = scanCode;
                 inputEvent->state = keyboardState->keyState[row][col];
