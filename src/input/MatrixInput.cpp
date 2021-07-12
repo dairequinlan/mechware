@@ -3,7 +3,7 @@
  #include <stdio.h>
  #include "pico/stdlib.h"
 #elif defined(TEENSY)
- #include <arduino.h>
+ #include <Arduino.h>
 #endif
 
 #include "MatrixInput.h"
@@ -20,6 +20,7 @@
 
 MatrixInput::MatrixInput() {
 
+<<<<<<< HEAD
     //set the row pins to 'input' which is the default 'disabled' state
   #if defined(PICO)
     for(int row=0; row < NUM_ROWS; row++) {
@@ -38,6 +39,13 @@ MatrixInput::MatrixInput() {
           pinMode(rowPins[row], INPUT);
     } 
     for (int col=0; col < NUM_COLS; col++) {
+=======
+  for(int row=0; row < NUM_ROWS; row++) {
+        pinMode(rowPins[row], INPUT);
+  }
+  
+  for (int col=0; col < NUM_COLS; col++) {
+>>>>>>> origin
         pinMode(colPins[col], INPUT_PULLUP);
     }
   #endif

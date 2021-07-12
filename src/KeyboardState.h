@@ -4,8 +4,9 @@
 #if defined(PICO)
 
 #elif defined(TEENSY) 
- #include <arduino.h>
+ #include <Arduino.h>
 #endif 
+
 
 #include "KeyDefines.h"
 #include "InputEvent.h"

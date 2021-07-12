@@ -11,7 +11,7 @@
  #include "tusb.h"
  #include "usb_descriptors.h"
 #elif defined(TEENSY) 
- #include <arduino.h>
+ #include <Arduino.h>
 #endif
 
 #include "KeyDefines.h"
@@ -132,8 +132,10 @@ void doTimerTick() {
 }
 
 void setup() {
+
     //Serial.begin(9600); //needs platformio.ini or teensy setup to be updated to add serial USB functionality.
     //TODO HAL serial comms layer (plugin)
+    //usbMIDI.begin();
     keyboardState = new KeyboardState(keyMaps, NUM_KEYMAPS, 
                                     keyPlugins, NUM_KEYPLUGINS, 
                                     wireHandlers, NUM_WIREHANDLERS);                          
