@@ -1,6 +1,6 @@
 #ifndef KEYBOARD_STATE
 #define KEYBOARD_STATE
-#include <arduino.h>
+#include <Arduino.h>
 
 #include "KeyDefines.h"
 #include "InputEvent.h"

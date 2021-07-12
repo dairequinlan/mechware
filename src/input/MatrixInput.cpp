@@ -1,4 +1,4 @@
-#include <arduino.h>
+#include <Arduino.h>
 #include "MatrixInput.h"
 
 byte rowPins[NUM_ROWS] = {13,21,20,18,19};
@@ -8,7 +8,7 @@ MatrixInput::MatrixInput() {
 
   for(int row=0; row < NUM_ROWS; row++) {
         pinMode(rowPins[row], INPUT);
-  } 
+  }
   
   for (int col=0; col < NUM_COLS; col++) {
         pinMode(colPins[col], INPUT_PULLUP);
