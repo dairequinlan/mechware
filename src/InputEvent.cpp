@@ -26,6 +26,6 @@ InputEvent::InputEvent(uint8_t state, uint8_t scancode) {
 
 void InputEvent::clear() {
     this->type = FREE;
-    this->scancode = NOK;
+    this->scancode = KC_NONE;
     this->source = 0;
 }

@@ -4,7 +4,7 @@
 
 
 MacroPlugin::MacroPlugin(uint8_t *scanCodes, int nCodes):KeyPlugin(scanCodes, nCodes){
-    lastKeyPressed = NOK;
+    lastKeyPressed = KC_NONE;
     stored = new uint8_t[MACRO_SIZE];
     storedIndex = 0;
 }

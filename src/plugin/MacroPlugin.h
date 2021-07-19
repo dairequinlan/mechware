@@ -20,7 +20,7 @@ class MacroPlugin:public KeyPlugin {
         uint8_t *stored;
         int storedIndex = 8;
         int macroSize = 0;
-        uint8_t lastKeyPressed = NOK;
+        uint8_t lastKeyPressed = KC_NONE;
         uint32_t lastKeyPressedTs;
         MacroPluginState pluginState = IDLE;
 };

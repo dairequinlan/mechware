@@ -36,52 +36,79 @@
 
 KeyboardState *keyboardState;
 
+/* TODO move these out somewhere to some board specific file. At the moment the 
+   right/left defines are VERY specific to my PICO split build, and the default
+   singular case is specific to that teensy board I built. Needs a neat way of 
+   encapsulating these into a board specific header file of some description
+   */
 #if defined(LEFT_HAND_SIDE)
 uint8_t keyMaps[NUM_KEYMAPS][NUM_ROWS][NUM_COLS] = {{ 
-{HID_KEY_F1, HID_KEY_F2, HID_KEY_ESCAPE, HID_KEY_1, HID_KEY_2, HID_KEY_3, HID_KEY_4, HID_KEY_5, HID_KEY_6},
-{HID_KEY_F3, HID_KEY_F4, HID_KEY_TAB,HID_KEY_NONE,HID_KEY_Q,HID_KEY_W,HID_KEY_E,HID_KEY_R,HID_KEY_T},
-{HID_KEY_F5, HID_KEY_F6, KEY_FUNCTION,HID_KEY_NONE,HID_KEY_A,HID_KEY_S,HID_KEY_D,HID_KEY_F,HID_KEY_G},
-{HID_KEY_F7, HID_KEY_F8, HID_KEY_SHIFT_LEFT,HID_KEY_EUROPE_2,HID_KEY_Z,HID_KEY_X,HID_KEY_C,HID_KEY_V,HID_KEY_B},
-{HID_KEY_F9, HID_KEY_F10, HID_KEY_CONTROL_LEFT,KEY_FUNCTION,HID_KEY_GUI_LEFT,HID_KEY_ALT_LEFT,HID_KEY_NONE,HID_KEY_SPACE,HID_KEY_NONE}
+{ KC_F1,  KC_F2,  KC_ESCAPE,  KC_1,  KC_2,  KC_3,  KC_4,  KC_5,  KC_6},
+{ KC_F3,  KC_F4,  KC_TAB, KC_NONE, KC_Q, KC_W, KC_E, KC_R, KC_T},
+{ KC_F5,  KC_F6,  KC_FUNCTION, KC_NONE, KC_A, KC_S, KC_D, KC_F, KC_G},
+{ KC_F7,  KC_F8,  KC_SHIFT_LEFT, KC_EUROPE_2, KC_Z, KC_X, KC_C, KC_V, KC_B},
+{ KC_F9,  KC_F10,  KC_CONTROL_LEFT, KC_FUNCTION, KC_GUI_LEFT, KC_ALT_LEFT, KC_NONE, KC_SPACE, KC_NONE}
 },{
-{KEY_REBOOT, HID_KEY_NONE, HID_KEY_GRAVE, HID_KEY_F1, HID_KEY_F2, HID_KEY_F3, HID_KEY_F4, HID_KEY_F5, HID_KEY_F6},
-{HID_KEY_NONE, HID_KEY_NONE, TRNS,HID_KEY_NONE,TRNS,HID_KEY_ARROW_UP,TRNS,TRNS,TRNS},
-{HID_KEY_NONE, HID_KEY_NONE, KEY_FUNCTION,HID_KEY_NONE,HID_KEY_ARROW_LEFT,HID_KEY_ARROW_DOWN,HID_KEY_ARROW_RIGHT,TRNS,TRNS},
-{HID_KEY_NONE, HID_KEY_NONE, HID_KEY_SHIFT_LEFT,TRNS,TRNS,TRNS,TRNS,TRNS,TRNS},
-{HID_KEY_NONE, HID_KEY_NONE, HID_KEY_CONTROL_LEFT,KEY_FUNCTION,HID_KEY_GUI_LEFT,HID_KEY_ALT_LEFT,HID_KEY_NONE,HID_KEY_SPACE,HID_KEY_NONE}
+{ KC_REBOOT,  KC_NONE,  KC_GRAVE,  KC_F1,  KC_F2,  KC_F3,  KC_F4,  KC_F5,  KC_F6},
+{ KC_NONE,  KC_NONE, TRNS, KC_NONE,TRNS, KC_ARROW_UP,TRNS,TRNS,TRNS},
+{ KC_NONE,  KC_NONE,  KC_FUNCTION, KC_NONE, KC_ARROW_LEFT, KC_ARROW_DOWN, KC_ARROW_RIGHT,TRNS,TRNS},
+{ KC_NONE,  KC_NONE,  KC_SHIFT_LEFT,TRNS,TRNS,TRNS,TRNS,TRNS,TRNS},
+{ KC_NONE,  KC_NONE,  KC_CONTROL_LEFT, KC_FUNCTION, KC_GUI_LEFT, KC_ALT_LEFT, KC_NONE, KC_SPACE, KC_NONE}
 }};
 #elif defined(RIGHT_HAND_SIDE)
 uint8_t keyMaps[NUM_KEYMAPS][NUM_ROWS][NUM_COLS] = {{ 
-{HID_KEY_7, HID_KEY_NONE, HID_KEY_8, HID_KEY_9, HID_KEY_0, HID_KEY_MINUS, HID_KEY_EQUAL, HID_KEY_BACKSPACE, HID_KEY_INSERT},
-{HID_KEY_Y, HID_KEY_U, HID_KEY_I, HID_KEY_O, HID_KEY_P, HID_KEY_BRACKET_LEFT, HID_KEY_BRACKET_RIGHT, HID_KEY_RETURN, HID_KEY_DELETE},
-{HID_KEY_H, HID_KEY_J, HID_KEY_K, HID_KEY_L, HID_KEY_SEMICOLON, HID_KEY_APOSTROPHE, HID_KEY_EUROPE_1, HID_KEY_NONE, HID_KEY_HOME},
-{HID_KEY_N, HID_KEY_M, HID_KEY_COMMA, HID_KEY_PERIOD, HID_KEY_SLASH, HID_KEY_NONE, HID_KEY_SHIFT_RIGHT, HID_KEY_ARROW_UP, HID_KEY_END},
-{HID_KEY_SPACE, HID_KEY_NONE, HID_KEY_NONE, HID_KEY_ALT_RIGHT, KEY_FUNCTION, HID_KEY_CONTROL_RIGHT, HID_KEY_ARROW_LEFT, HID_KEY_ARROW_DOWN, HID_KEY_ARROW_RIGHT}
+{ KC_7,  KC_NONE,  KC_8,  KC_9,  KC_0,  KC_MINUS,  KC_EQUAL,  KC_BACKSPACE,  KC_INSERT},
+{ KC_Y,  KC_U,  KC_I,  KC_O,  KC_P,  KC_BRACKET_LEFT,  KC_BRACKET_RIGHT,  KC_RETURN,  KC_DELETE},
+{ KC_H,  KC_J,  KC_K,  KC_L,  KC_SEMICOLON,  KC_APOSTROPHE,  KC_EUROPE_1,  KC_NONE,  KC_HOME},
+{ KC_N,  KC_M,  KC_COMMA,  KC_PERIOD,  KC_SLASH,  KC_NONE,  KC_SHIFT_RIGHT,  KC_ARROW_UP,  KC_END},
+{ KC_SPACE,  KC_NONE,  KC_NONE,  KC_ALT_RIGHT,  KC_FUNCTION,  KC_CONTROL_RIGHT,  KC_ARROW_LEFT,  KC_ARROW_DOWN,  KC_ARROW_RIGHT}
 },{
-{HID_KEY_F7, HID_KEY_F8, HID_KEY_F9, HID_KEY_F10, HID_KEY_F11, HID_KEY_F12, TRNS, TRNS, KEY_REBOOT},
+{ KC_F7,  KC_F8,  KC_F9,  KC_F10,  KC_F11,  KC_F12, TRNS, TRNS,  KC_REBOOT},
 {TRNS, TRNS, TRNS, TRNS, TRNS, TRNS, TRNS, TRNS, TRNS},
-{TRNS, TRNS, TRNS, TRNS, TRNS, TRNS, TRNS, TRNS, HID_KEY_PAGE_UP},
-{TRNS, TRNS, TRNS, TRNS, TRNS, TRNS, TRNS, TRNS, HID_KEY_PAGE_DOWN},
+{TRNS, TRNS, TRNS, TRNS, TRNS, TRNS, TRNS, TRNS,  KC_PAGE_UP},
+{TRNS, TRNS, TRNS, TRNS, TRNS, TRNS, TRNS, TRNS,  KC_PAGE_DOWN},
 {TRNS, TRNS, TRNS, TRNS, TRNS, TRNS, TRNS, TRNS, TRNS},
+}};
+#else
+uint8_t keyMaps[NUM_KEYMAPS][NUM_ROWS][NUM_COLS] = {{
+{ KC_ESCAPE, KC_1, KC_2, KC_3, KC_4, KC_5, KC_6, KC_7, KC_8, KC_9, KC_0, KC_MINUS, KC_EQUAL, KC_BACKSPACE, KC_INSERT, KC_HOME},
+{ KC_TAB, KC_Q, KC_W, KC_E, KC_R, KC_T, KC_Y, KC_U, KC_I, KC_O, KC_P, KC_BRACKET_LEFT, KC_BRACKET_RIGHT, KC_NONE, KC_DELETE, KC_END},
+{ KC_FUNCTION, KC_A, KC_S, KC_D, KC_F, KC_G, KC_H, KC_J, KC_K, KC_L, KC_SEMICOLON, KC_APOSTROPHE,KC_EUROPE_1, KC_RETURN, KC_SPECIAL, KC_PAGE_UP},
+{ KC_SHIFT_LEFT,KC_EUROPE_2, KC_Z, KC_X, KC_C, KC_V, KC_B, KC_N, KC_M, KC_COMMA, KC_PERIOD, KC_SLASH,KC_SHIFT_RIGHT, KC_NONE, KC_ARROW_UP, KC_PAGE_DOWN},
+{ KC_CONTROL_LEFT,KC_GUI_LEFT, KC_ALT_LEFT, KC_NONE, KC_NONE, KC_NONE, KC_SPACE, KC_NONE, KC_NONE, KC_NONE,KC_ALT_RIGHT, KC_FUNCTION,KC_CONTROL_RIGHT, KC_ARROW_LEFT, KC_ARROW_DOWN, KC_ARROW_RIGHT}                                 
+},{
+{ KC_GRAVE, KC_F1, KC_F2, KC_F3, KC_F4, KC_F5, KC_F6, KC_F7, KC_F8, KC_F9, KC_F10, KC_F11, KC_F12,TRNS,TRNS,TRNS},
+{TRNS, KC_NONE, KC_ARROW_UP, KC_NONE, KC_NONE, KC_NONE, KC_NONE, KC_INSERT, KC_HOME, KC_PAGE_UP, KC_NONE, KC_NONE, KC_NONE, KC_NONE,TRNS,TRNS},
+{TRNS, KC_ARROW_LEFT, KC_ARROW_DOWN, KC_ARROW_RIGHT, KC_NONE, KC_NONE, KC_NONE, KC_DELETE, KC_END, KC_PAGE_DOWN, KC_NONE, KC_NONE, KC_NONE,TRNS, KC_FUNCTION,TRNS},
+{TRNS, KC_NONE, KC_NONE, KC_NONE, KC_NONE, KC_NONE, KC_NONE, KC_NONE, KC_NONE, KC_NONE, KC_NONE, KC_NONE,TRNS, KC_NONE,TRNS,TRNS},
+{TRNS,TRNS,TRNS, KC_NONE, KC_NONE, KC_NONE,TRNS, KC_NONE, KC_NONE, KC_NONE,TRNS,TRNS,TRNS,TRNS,TRNS,TRNS}                               
 }};
 #endif
 
 //keylists for the plugins
-//int macroList[] = {KEY_SPECIAL};
-//int sticKeyList[] = {KEY_FUNCTION,MODIFIERKEY_SHIFT};
-uint8_t funcKeyList[] = {KEY_FUNCTION};
-//int tapHoldTap[] = {KEY_Y};
-//int tapHoldHold[] = {KEY_T};
-uint8_t rebootList[] = {KEY_REBOOT};
+//int macroList[] = { KC_SPECIAL};
+//int sticKeyList[] = { KC_FUNCTION,MODIFIER KC_SHIFT};
+uint8_t funcKeyList[] = { KC_FUNCTION};
+//int tapHoldTap[] = { KC_Y};
+//int tapHoldHold[] = { KC_T};
+uint8_t rebootList[] = { KC_REBOOT};
 
-#define NUM_KEYPLUGINS 1
-KeyPlugin* keyPlugins[] = {   
+
+#if defined(PICO) 
+ #define NUM_KEYPLUGINS 2
+ KeyPlugin* keyPlugins[] = {   
+        new FnPlugin(funcKeyList,1),
+        new PicoRebootPlugin(rebootList,1)
+        };
+#elif defined(TEENSY)
+ #define NUM_KEYPLUGINS 1
+ KeyPlugin* keyPlugins[] = {   
         //new MacroPlugin(macroList,1),
         //new SticKeyPlugin(sticKeyList,2),
         //new TapHoldPlugin(tapHoldTap, tapHoldHold, 1), 
         new FnPlugin(funcKeyList,1),
-        new PicoRebootPlugin(rebootList,1)
         };
+#endif
 
 #if defined(PRIMARY)
  bool primary = true; 
@@ -91,21 +118,33 @@ KeyPlugin* keyPlugins[] = {
             I2CIOController,
             new TinyUSBWireHandler() 
         };
-#else
+#elif defined(SECONDARY)
  bool primary = false;
  I2CWireHandler* I2CIOController = new I2CWireHandler(primary);
  #define NUM_WIREHANDLERS 1
  WireHandler* wireHandlers[] = { 
             I2CIOController,
         };
-#endif
-
-
-#define NUM_INPUT_DEVICES 2
-InputDevice* inputDevices[] = { 
-            new MatrixInput(),
-            I2CIOController 
+#else  //TODO generalise this; default single board case, which coincides at the moment with the teensy board
+ #define NUM_WIREHANDLERS 1
+ WireHandler* wireHandlers[] = {
+            new USBWireHandler() 
         };
+ 
+#endif
+ 
+#if defined(PRIMARY) || defined(SECONDARY)
+ #define NUM_INPUT_DEVICES 2
+ InputDevice* inputDevices[] = { 
+             new MatrixInput(),
+             I2CIOController 
+         };
+#else
+ #define NUM_INPUT_DEVICES 1
+ InputDevice* inputDevices[] = {
+            new MatrixInput()
+        };
+#endif
 
 
 void doInputs() {
@@ -133,7 +172,7 @@ void doTimerTick() {
 
 void setup() {
 
-    //Serial.begin(9600); //needs platformio.ini or teensy setup to be updated to add serial USB functionality.
+    Serial.begin(9600); //needs platformio.ini or teensy setup to be updated to add serial USB functionality.
     //TODO HAL serial comms layer (plugin)
     //usbMIDI.begin();
     keyboardState = new KeyboardState(keyMaps, NUM_KEYMAPS, 

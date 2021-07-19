@@ -9,9 +9,9 @@ class TapHoldPlugin : public KeyPlugin {
         TapHoldPlugin(uint8_t* scanCodes, uint8_t* holdCodes, int nCodes);
         bool inputEvent(InputEvent* event, KeyboardState* kbState);
 
-        uint8_t holdScanCode = KEY_T;
+        uint8_t holdScanCode = KC_T;
         uint32_t pressedTS;
-        uint8_t pressedScanCode = NOK;
+        uint8_t pressedScanCode = KC_NONE;
         
         TapHoldState state = WAITING;
 };

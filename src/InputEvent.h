@@ -1,6 +1,12 @@
 #ifndef INPUT_EVENT
 #define INPUT_EVENT
-#include "pico/stdlib.h"
+
+#if defined(PICO)
+ #include "pico/stdlib.h"
+#elif defined(TEENSY)
+ #include <stdint.h>
+#endif
+
 #include "KeyDefines.h"
 
 enum InputEventType {FREE,SCANCODE,TIMER};
@@ -13,7 +19,7 @@ class InputEvent {
         InputEvent(uint8_t state, uint8_t scancode,uint8_t source);
         void clear();
 
-        uint8_t  scancode = NOK;
+        uint8_t  scancode = KC_NONE;
         uint8_t  state = 0;
         uint32_t timestamp;
         uint8_t source = 0;

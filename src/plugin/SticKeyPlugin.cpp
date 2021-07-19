@@ -5,9 +5,9 @@
 //click & double click keys inside this time period to lock the key until pressed again.
 #define STICKEY_TIMEOUT 200
 
-SticKeyPlugin::SticKeyPlugin(uint8_t* scanCodes, int nCodes):KeyPlugin(scanCodes, nCodes) {
-    lastKeyClicked = NOK;
-    lastKeyPressed = NOK;
+SticKeyPlugin::SticKeyPlugin(uint8_t *scanCodes, int nCodes):KeyPlugin(scanCodes, nCodes) {
+    lastKeyClicked = KC_NONE;
+    lastKeyPressed = KC_NONE;
 }
 
 bool SticKeyPlugin::inputEvent(InputEvent* event, KeyboardState* kbState) {
@@ -23,7 +23,7 @@ bool SticKeyPlugin::inputEvent(InputEvent* event, KeyboardState* kbState) {
                    //we return false to swallow this KEY_RELEASED
                    return false;
                }
-               lastKeyClicked = NOK;
+               lastKeyClicked = KC_NONE;
            } else {
                lastKeyClicked = event->scancode; 
                lastKeyClickedTs = millis();

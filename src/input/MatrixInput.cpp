@@ -9,13 +9,19 @@
 #include "MatrixInput.h"
 
 //TODO get these pin assignments and put them someplace else along with the
-//     key map defines and so on.
+//     key map defines and so on, the LEFT/RIGHT are VERY SPECIFIC to the split keyboard
+//     that I've built with the PICOs, and the default case i.e. meant to represent
+//     a single unit non-split keyboard, is specific to the particular keyboard I 
+//     built with the teensy in it.
 #if defined(LEFT_HAND_SIDE)
  unsigned char rowPins[NUM_ROWS] = {13,12,11,10,9};
  unsigned char colPins[NUM_COLS] = {15,14,8,7,6,5,4,3,2};
 #elif defined(RIGHT_HAND_SIDE)
  unsigned char rowPins[NUM_ROWS] = {1,2,3,4,5};
  unsigned char colPins[NUM_COLS] = {13,12,11,10,9,8,7,6,0};
+#else //will be triggered at the moment only in the teensy case.
+  unsigned char rowPins[NUM_ROWS] = {13,21,20,18,19};
+  unsigned char colPins[NUM_COLS] = {12,11,10,9,8,7,6,5,4,3,2,1,17,16,15,14};
 #endif
 
 MatrixInput::MatrixInput() {
@@ -32,7 +38,6 @@ MatrixInput::MatrixInput() {
         gpio_set_dir(colPins[col], GPIO_IN);
         gpio_pull_up(colPins[col]);
     }
-
   #elif defined(TEENSY)
     for(int row=0; row < NUM_ROWS; row++) {
           pinMode(rowPins[row], INPUT);
@@ -91,7 +96,15 @@ bool MatrixInput::scan(KeyboardState* keyboardState) {
                 inputEvent->scancode = scanCode;
                 inputEvent->state = keyboardState->keyState[row][col];
                 keyboardState->inputEvent(inputEvent);
-                printf("%i %i %i\n",scanCode,row,col);
+                #if defined(PICO)
+                 printf("%i %i %i\n",scanCode,row,col);
+                #elif defined(TEENSY)
+                 Serial.print("Debounced ");
+                 Serial.print(scanCode);
+                 Serial.print(" ");
+                 Serial.print(inputEvent->state);
+                 Serial.println("");
+                #endif
               }
             }
         }
