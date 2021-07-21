@@ -3,6 +3,7 @@
  #include "tusb.h"
 #endif 
 
+#include "board.h"
 #include "KeyboardState.h"
 
 int pressed[256] = {0};

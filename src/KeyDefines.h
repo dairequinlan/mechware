@@ -5,25 +5,6 @@
 #define KEY_RELEASED 1
 #define KEY_PRESSED 0
 
-//number of rows and columns
-#define NUM_KEYMAPS 2
-
-/* TODO again again, this is very specific to the board config, need to find a way
-   to move this out into board specific includes and then just use a single define
-   on the build config to dictate which board config is included
-*/
-
-#if defined(LEFT_HAND_SIDE)
- #define NUM_ROWS 5
- #define NUM_COLS 9
-#elif defined(RIGHT_HAND_SIDE)
- #define NUM_ROWS 5
- #define NUM_COLS 9
-#else
- #define NUM_ROWS 5
- #define NUM_COLS 16
-#endif
-
 //number of iterations of identical keyscan values before we trigger a keypress
 #define DEBOUNCE_ITER 5
 

@@ -7,13 +7,13 @@
  #include <Arduino.h>
 #endif 
 
-
 #include "KeyDefines.h"
 #include "InputEvent.h"
 #include "InputEventPool.h"
 #include "plugin/KeyPlugin.h"
 #include "wire/WireHandler.h"
 
+#include "board.h"
 
 class KeyPlugin;
 class WireHandler;

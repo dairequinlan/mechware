@@ -8,25 +8,11 @@
 
 #include "MatrixInput.h"
 
-//TODO get these pin assignments and put them someplace else along with the
-//     key map defines and so on, the LEFT/RIGHT are VERY SPECIFIC to the split keyboard
-//     that I've built with the PICOs, and the default case i.e. meant to represent
-//     a single unit non-split keyboard, is specific to the particular keyboard I 
-//     built with the teensy in it.
-#if defined(LEFT_HAND_SIDE)
- unsigned char rowPins[NUM_ROWS] = {13,12,11,10,9};
- unsigned char colPins[NUM_COLS] = {15,14,8,7,6,5,4,3,2};
-#elif defined(RIGHT_HAND_SIDE)
- unsigned char rowPins[NUM_ROWS] = {1,2,3,4,5};
- unsigned char colPins[NUM_COLS] = {13,12,11,10,9,8,7,6,0};
-#else //will be triggered at the moment only in the teensy case.
-  unsigned char rowPins[NUM_ROWS] = {13,21,20,18,19};
-  unsigned char colPins[NUM_COLS] = {12,11,10,9,8,7,6,5,4,3,2,1,17,16,15,14};
-#endif
+extern uint8_t rowPins[NUM_ROWS];
+extern uint8_t colPins[NUM_COLS];
 
 MatrixInput::MatrixInput() {
-
-    //set the row pins to 'input' which is the default 'disabled' state
+  //set the row pins to 'input' which is the default 'disabled' state
   #if defined(PICO)
     for(int row=0; row < NUM_ROWS; row++) {
         gpio_init(rowPins[row]);

@@ -26,12 +26,13 @@ target_sources(pico-firmware-common INTERFACE
         ${CMAKE_CURRENT_SOURCE_DIR}/src/input/MatrixInput.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/src/usb_descriptors.c
         ${CMAKE_CURRENT_SOURCE_DIR}/src/wire/I2CWireHandler.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/boards/split-pico/board.cpp
 )
 target_link_libraries(pico-firmware-common INTERFACE 
         pico_stdlib tinyusb_device tinyusb_board hardware_i2c
 )
 target_include_directories(pico-firmware-common INTERFACE
-        ${CMAKE_CURRENT_LIST_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/src   
+        ${CMAKE_CURRENT_LIST_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/src ${CMAKE_CURRENT_SOURCE_DIR}/src/boards/split-pico
 )
 
 target_compile_options(pico-firmware-common INTERFACE -DPICO_ENTER_USB_BOOT_ON_EXIT=1)

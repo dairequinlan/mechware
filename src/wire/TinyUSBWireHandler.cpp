@@ -5,7 +5,7 @@
 
 bool TinyUSBWireHandler::inputEvent(InputEvent* event, KeyboardState* kbState) {
 
-    if(event->type == SCANCODE && event->scancode < KEY_SPECIAL){
+    if(event->type == SCANCODE && event->scancode < KC_SPECIAL){
 
         if(event->state == KEY_PRESSED) {
             addKey(event->scancode);
