@@ -2,6 +2,7 @@
 #include "../../wire/USBWireHandler.h"
 #include "../../input/MatrixInput.h"
 #include "../../plugin/FnPlugin.h"
+#include "../../wire/USBMIDIHandler.h"
 
 unsigned char rowPins[NUM_ROWS] = {13,21,20,18,19};
 unsigned char colPins[NUM_COLS] = {12,11,10,9,8,7,6,5,4,3,2,1,17,16,15,14};
@@ -30,14 +31,24 @@ unsigned char keyMaps[NUM_KEYMAPS][NUM_ROWS][NUM_COLS] = {{
 //keylists for the plugins
 //int sticKeyList[] = { KC_FUNCTION,MODIFIER KC_SHIFT};
 
+//our USBMidiHandler is simulataneously a Wire plugin AND a key plugin
+//the keyPlugin half of it handles activation and mode switching, the 
+//wire half handles the actual note transmission on USB.
+//we create ONE instance and add it to the list of KeyPlugins AND the 
+//list of Wire Plugins.
+uint8_t midiModeKeyList[] = {KC_SPECIAL};
+USBMIDIHandler* midiHandler = new USBMIDIHandler(midiModeKeyList,1);
+
 uint8_t fnKeyList[] = {KC_FUNCTION};
 KeyPlugin* keyPlugins[] = {   
         //new SticKeyPlugin(sticKeyList,2),
         new FnPlugin(fnKeyList,1),
+        midiHandler
         };
 
 
  WireHandler* wireHandlers[] = {
+            midiHandler,
             new USBWireHandler() 
         };
 

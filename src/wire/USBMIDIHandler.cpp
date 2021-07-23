@@ -85,11 +85,29 @@ struct KeyNote chromatic[NUM_CHROMATIC_NOTES] = {
     { KC_A,53}    
 };
 
-uint8_t USBMIDIHandler::getNote(int scancode) {
+USBMIDIHandler::USBMIDIHandler(uint8_t *scanCodes, int nCodes):KeyPlugin(scanCodes, nCodes){
+    usbMIDI.begin();
+}
 
-    for(int i = 0; i < NUM_JANKO_NOTES; i++) {
-        if(scancode == janko[i].scancode) {
-            return janko[i].note;
+uint8_t USBMIDIHandler::getNote(MIDIMode mode, int scancode) {
+
+    int size = 0;
+    KeyNote* which = NULL;
+
+    switch(mode) {
+        case JANKO:
+                size = NUM_JANKO_NOTES;
+                which = janko;
+                break;
+        case CHROMATIC:
+        default:
+                size = NUM_CHROMATIC_NOTES;
+                which = chromatic;
+    } 
+
+    for(int i = 0; i < size; i++) {
+        if(scancode == which[i].scancode) {
+            return which[i].note;
         }
     }
 
@@ -97,13 +115,42 @@ uint8_t USBMIDIHandler::getNote(int scancode) {
 }
 
 bool USBMIDIHandler::inputEvent(InputEvent* event, KeyboardState* kbState) {
-    if(event->type == SCANCODE){
-        uint8_t note = getNote(event->scancode);
-        if(event->state ==  KEY_PRESSED) {
-             if (note != 0) usbMIDI.sendNoteOn(note, 99, 1);
-        } else {
-            if (note != 0) usbMIDI.sendNoteOff(note, 99, 1);
+
+    if(event->type == SCANCODE) {
+        
+        Serial.print("MIDI HANDLER ");
+        Serial.print(event->scancode);
+        Serial.print(" ");
+        Serial.print(nCodes);
+        Serial.print(" ");
+        Serial.println(scanCodes[0]);
+
+        //do the switcheroo with modes if the appropriate key is hit.
+        if(nCodes > 0 && event->scancode == scanCodes[0]
+            && event->state == KEY_RELEASED) {
+            switch(mode) {
+                case DISABLED:  mode = JANKO;
+                                break;
+                case JANKO:     mode = CHROMATIC;
+                                break;
+                case CHROMATIC: mode = DISABLED;
+                                break;
+            }
         }
+        Serial.print("MODE ");
+        Serial.println(mode);
+
+        if(mode != DISABLED) {
+            uint8_t note = getNote(mode, event->scancode);
+
+            if(event->state ==  KEY_PRESSED) {
+                if (note != 0) usbMIDI.sendNoteOn(note, 99, 1);
+            } else {
+                if (note != 0) usbMIDI.sendNoteOff(note, 99, 1);
+            }
+            return false;
+        } 
     }
-    return false;
+
+    return true;
 }
