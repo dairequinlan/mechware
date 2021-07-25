@@ -2,7 +2,7 @@
 #define USB_MIDI_HANDLER
 #include "WireHandler.h"
 
-enum MIDIMode {DISABLED,JANKO,CHROMATIC};
+enum MIDIMode {DISABLED,JANKO,SONOME,CHROMATIC};
 
 class USBMIDIHandler : public WireHandler, public KeyPlugin {
     public:

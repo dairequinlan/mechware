@@ -8,6 +8,60 @@ struct KeyNote {
     uint8_t note;
 };
 
+#define NUM_SONOME_NOTES 47
+struct KeyNote sonome[NUM_SONOME_NOTES] = {
+    { KC_1, 24},
+    { KC_2, 31},
+    { KC_3, 38},
+    { KC_4, 45},
+    { KC_5, 52},
+    { KC_6, 59},
+    { KC_7, 66},
+    { KC_8, 73},
+    { KC_9, 80},
+    { KC_0, 87},
+    { KC_MINUS, 94},
+    { KC_EQUAL, 101},
+
+    { KC_Q, 28},
+    { KC_W, 35},
+    { KC_E, 42},
+    { KC_R, 49},
+    { KC_T, 56},
+    { KC_Y, 63},
+    { KC_U, 70},
+    { KC_I, 77},
+    { KC_O, 84},
+    { KC_P, 91},
+    { KC_BRACKET_LEFT, 98},
+    { KC_BRACKET_RIGHT, 105},
+
+    { KC_A, 32},
+    { KC_S, 39},
+    { KC_D, 46},
+    { KC_F, 53},
+    { KC_G, 60},
+    { KC_H, 67},
+    { KC_J, 74},
+    { KC_K, 81},
+    { KC_L, 88}, 
+    { KC_SEMICOLON, 95},
+    { KC_APOSTROPHE, 102},
+    {KC_EUROPE_1, 109},
+    
+    {KC_EUROPE_2, 29},
+    { KC_Z, 36},
+    { KC_X, 43},
+    { KC_C, 50},
+    { KC_V, 57},
+    { KC_B, 64},
+    { KC_N, 71},
+    { KC_M, 78},
+    { KC_COMMA, 85},
+    { KC_PERIOD, 92},
+    { KC_SLASH, 99}
+};
+
 #define NUM_JANKO_NOTES 47
 struct KeyNote janko[NUM_JANKO_NOTES] = {
     { KC_1, 62},
@@ -99,6 +153,10 @@ uint8_t USBMIDIHandler::getNote(MIDIMode mode, int scancode) {
                 size = NUM_JANKO_NOTES;
                 which = janko;
                 break;
+        case SONOME:
+                size = NUM_SONOME_NOTES;
+                which = sonome;
+                break;
         case CHROMATIC:
         default:
                 size = NUM_CHROMATIC_NOTES;
@@ -117,28 +175,23 @@ uint8_t USBMIDIHandler::getNote(MIDIMode mode, int scancode) {
 bool USBMIDIHandler::inputEvent(InputEvent* event, KeyboardState* kbState) {
 
     if(event->type == SCANCODE) {
-        
-        Serial.print("MIDI HANDLER ");
-        Serial.print(event->scancode);
-        Serial.print(" ");
-        Serial.print(nCodes);
-        Serial.print(" ");
-        Serial.println(scanCodes[0]);
-
         //do the switcheroo with modes if the appropriate key is hit.
         if(nCodes > 0 && event->scancode == scanCodes[0]
             && event->state == KEY_RELEASED) {
             switch(mode) {
                 case DISABLED:  mode = JANKO;
                                 break;
-                case JANKO:     mode = CHROMATIC;
+                case JANKO:     mode = SONOME;                
+                                break;
+                case SONOME:    mode = CHROMATIC;
                                 break;
                 case CHROMATIC: mode = DISABLED;
                                 break;
             }
+            Serial.print("MIDI MODE: ");
+            Serial.println(mode);
+            return false;
         }
-        Serial.print("MODE ");
-        Serial.println(mode);
 
         if(mode != DISABLED) {
             uint8_t note = getNote(mode, event->scancode);
