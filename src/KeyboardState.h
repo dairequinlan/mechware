@@ -1,6 +1,11 @@
 #ifndef KEYBOARD_STATE
 #define KEYBOARD_STATE
-#include <Arduino.h>
+
+#if defined(PICO)
+
+#elif defined(TEENSY) 
+ #include <Arduino.h>
+#endif 
 
 #include "KeyDefines.h"
 #include "InputEvent.h"
@@ -8,28 +13,29 @@
 #include "plugin/KeyPlugin.h"
 #include "wire/WireHandler.h"
 
+#include "board.h"
 
 class KeyPlugin;
 class WireHandler;
 
 class KeyboardState {
     public:
-        KeyboardState(  int keyMaps[2][NUM_ROWS][NUM_COLS], int nKeyMaps, 
+        KeyboardState(  uint8_t keyMaps[2][NUM_ROWS][NUM_COLS], int nKeyMaps, 
                         KeyPlugin* keyPlugins[], int nKeyPlugins,
                         WireHandler* wireHandlers[], int nWireHandlers);
         void clearKeyStates();
-        void resetKeyStates(int fromKeyMap[NUM_ROWS][NUM_COLS], int toKeyMap[NUM_ROWS][NUM_COLS]);
+        void resetKeyStates(uint8_t fromKeyMap[NUM_ROWS][NUM_COLS], uint8_t toKeyMap[NUM_ROWS][NUM_COLS]);
         void raise();
         void lower();
-        int getScanCode(int row, int col);    
-        int getScanCode(int keyMap[NUM_ROWS][NUM_COLS], int row, int col);
+        uint8_t getScanCode(int row, int col);    
+        uint8_t getScanCode(uint8_t keyMap[NUM_ROWS][NUM_COLS], int row, int col);
         void inputEvent(InputEvent *event);
         void runWireHandlers(InputEvent *event);
         void wirePrint(char *str);
 
-        byte keyIterCount[NUM_ROWS][NUM_COLS];
-        byte keyState[NUM_ROWS][NUM_COLS]; 
-        int (*keyMaps)[NUM_ROWS][NUM_COLS];
+        unsigned char keyIterCount[NUM_ROWS][NUM_COLS];
+        uint8_t keyState[NUM_ROWS][NUM_COLS]; 
+        uint8_t (*keyMaps)[NUM_ROWS][NUM_COLS];
         int nKeyMaps;
         KeyPlugin** keyPlugins;
         int nKeyPlugins;

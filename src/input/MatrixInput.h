@@ -3,6 +3,7 @@
 #include "../KeyboardState.h"
 #include "../InputEvent.h"
 #include "InputDevice.h"
+#include "board.h"
 
 class MatrixInput: public InputDevice {
     public:

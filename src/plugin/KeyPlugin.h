@@ -7,10 +7,10 @@ class KeyboardState;
 class KeyPlugin {
     public :
         KeyPlugin();
-        KeyPlugin(int *scanCodes, int nCodes);
-        bool isKey(int scanCode);
+        KeyPlugin(uint8_t *scanCodes, int nCodes);
+        bool isKey(uint8_t scanCode);
         virtual bool inputEvent(InputEvent* event, KeyboardState* kbState);
-        int *scanCodes;
+        uint8_t *scanCodes;
         int nCodes;
 };
 

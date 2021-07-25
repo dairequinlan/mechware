@@ -1,7 +1,15 @@
+#if defined(PICO)
+ #include <stdio.h>
+ #include "tusb.h"
+#endif 
+
+#include "board.h"
 #include "KeyboardState.h"
 
+int pressed[256] = {0};
+
 KeyboardState::KeyboardState(
-                            int keyMaps[2][NUM_ROWS][NUM_COLS] , int nKeyMaps,
+                            uint8_t keyMaps[2][NUM_ROWS][NUM_COLS] , int nKeyMaps,
                             KeyPlugin* keyPlugins[], int nKeyPlugins,
                             WireHandler* wireHandlers[], int nWireHandlers) {
   this->keyMaps = keyMaps;
@@ -38,14 +46,14 @@ void KeyboardState::lower() {
 }
 
 //gets the scancode from the currently active keymap
-int KeyboardState::getScanCode(int row, int col) {
+uint8_t KeyboardState::getScanCode(int row, int col) {
   return getScanCode(keyMaps[activeKeyMapIndex],row,col);
 }
 
 //gets the scancode given a keymap and row/col
 //given the layer and row/col, get the appropriate scancode
-int KeyboardState::getScanCode(int keyMap[5][16], int row, int col) {
-  int scanCode = keyMap[row][col];
+uint8_t KeyboardState::getScanCode(uint8_t keyMap[NUM_ROWS][NUM_COLS], int row, int col) {
+  uint8_t scanCode = keyMap[row][col];
   int trnsIndex = activeKeyMapIndex;
   while(scanCode == TRNS && trnsIndex >= 0) {
     scanCode = keyMaps[trnsIndex--][row][col];
@@ -55,8 +63,9 @@ int KeyboardState::getScanCode(int keyMap[5][16], int row, int col) {
 
 //input event raised by one of the input plugins
 void KeyboardState::inputEvent(InputEvent* event) {
-//first plugins, and bail out of the loop and method
+  //first plugins, and bail out of the loop and method
   //if any of them return false.
+
   for(int plugin = 0; plugin < nKeyPlugins; plugin ++) {
     if(!keyPlugins[plugin]->inputEvent(event, this)) {
       event->clear();
@@ -110,7 +119,7 @@ void KeyboardState::clearKeyStates() {
 //'released' state and their iter counts set to DEBOUNCE_ITER+1. 
 //Quick improvement: Only do this if the scan codes are different in the two maps. This means that 
 //any keys that are the same between the layers like the modifiers will remain pressed.
-void KeyboardState::resetKeyStates(int fromKeyMap[5][16], int toKeyMap[5][16]) {
+void KeyboardState::resetKeyStates(uint8_t fromKeyMap[NUM_ROWS][NUM_COLS], uint8_t toKeyMap[NUM_ROWS][NUM_COLS]) {
   //set the initial values on the iter count and state arrays.
   for (int row = 0; row < NUM_ROWS; row++) {
     for (int col = 0; col < NUM_COLS; col++) {
@@ -119,8 +128,8 @@ void KeyboardState::resetKeyStates(int fromKeyMap[5][16], int toKeyMap[5][16]) {
         keyIterCount[row][col] = DEBOUNCE_ITER + 1;
         //if it's currently PRESSED then we have to 'release' the 'from' map keycode, and 'press' the 'to' keycode
          if(keyState[row][col] == KEY_PRESSED) {
-            int fromKeyCode = getScanCode(fromKeyMap,row,col);
-            int toKeyCode =   getScanCode(toKeyMap,row,col);
+            uint8_t fromKeyCode = getScanCode(fromKeyMap,row,col);
+            uint8_t toKeyCode =   getScanCode(toKeyMap,row,col);
             runWireHandlers(new InputEvent(KEY_RELEASED, fromKeyCode));
             runWireHandlers(new InputEvent(KEY_PRESSED, toKeyCode));
         }       

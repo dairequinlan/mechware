@@ -3,9 +3,9 @@
 #include "../KeyDefines.h"
 
 
-MacroPlugin::MacroPlugin(int *scanCodes, int nCodes):KeyPlugin(scanCodes, nCodes){
-    lastKeyPressed = NOK;
-    stored = new int[MACRO_SIZE];
+MacroPlugin::MacroPlugin(uint8_t *scanCodes, int nCodes):KeyPlugin(scanCodes, nCodes){
+    lastKeyPressed = KC_NONE;
+    stored = new uint8_t[MACRO_SIZE];
     storedIndex = 0;
 }
 
@@ -18,7 +18,7 @@ void MacroPlugin::replayMacro(KeyboardState* kbState) {
     }
 }
 
-void MacroPlugin::storeCode(int state, int scanCode) {
+void MacroPlugin::storeCode(uint8_t state, uint8_t scanCode) {
     stored[storedIndex++]  = state;
     stored[storedIndex++]  = scanCode;
 }

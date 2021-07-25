@@ -9,6 +9,7 @@ class InputEventPool {
     public:
         InputEventPool();
         InputEvent* getInputEvent(InputEventType type);
+        InputEvent* getInputEvent(InputEvent event);
 
     private:
         InputEvent inputEvents[INPUT_EVENT_POOL_SIZE];

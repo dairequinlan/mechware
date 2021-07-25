@@ -3,7 +3,7 @@
 #include "KeyDefines.h"
 
 
-FnPlugin::FnPlugin(int *scanCodes, int nCodes):KeyPlugin(scanCodes, nCodes){
+FnPlugin::FnPlugin(uint8_t *scanCodes, int nCodes):KeyPlugin(scanCodes, nCodes){
 }
 
 bool FnPlugin::inputEvent(InputEvent* event, KeyboardState* kbState){

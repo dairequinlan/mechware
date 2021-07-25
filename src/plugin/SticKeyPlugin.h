@@ -4,13 +4,13 @@
 
 class SticKeyPlugin : public KeyPlugin {
     public :
-        SticKeyPlugin(int* scanCodes, int nCodes);
+        SticKeyPlugin(uint8_t *scanCodes, int nCodes);
         bool inputEvent(InputEvent* event, KeyboardState* kbState);
 
-        int lastKeyPressed = NOK;
-        int lastKeyClicked = NOK;
-        unsigned long lastKeyPressedTs = 0;
-        unsigned long lastKeyClickedTs = 0;
+        uint8_t lastKeyPressed = KC_NONE;
+        uint8_t lastKeyClicked = KC_NONE;
+        uint32_t lastKeyPressedTs = 0;
+        uint32_t lastKeyClickedTs = 0;
 
 };
 
