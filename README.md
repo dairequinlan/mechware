@@ -1,6 +1,8 @@
 # mechware
 Modular and configurable plugin based firmware for mechanical keyboard.
 
+As per merge of PICO branch, will build for Teensy/Arduino on platformIO (edit platformio.ini file as appropriate) or as part of the PICO SDK, with cmake, similar to the usual PICO SDK CLI based build.
+
 There are 3 different types of plugins, input, wire, and general plugins. The plugins are registered on startup, and run sequentially in the specified order, each one returning a boolean value indicating whether to terminate the chain at that point.
 
 **input/** contains device input classes, currently one which performs the scan of the keyboard matrix and does press/release detection and debounce. Further input classes might include I2C or Serial input classes, responsible for reading values from the other half of a split keyboard for example, and inserting them into the chain.
@@ -17,15 +19,17 @@ Currently contains the following functional plugins,
  * USBWireHandler: outputs key press and release events on USB so the keyboard can function as, well, a keyboard.
  * SerialWireHandler I was using this as an alternative to the USB handler while debugging, it's useful sometimes when your keyboard-in-progress DOESN'T act like a keyboard, when you screw stuff up.
 
+**Multi type plugins/** Plugins can extend more than one type. The MIDI Handler is a case in point, it extends the KeyPlugin and WireHandler subclasses,and added to both lists of plugins (wire and key plugins). The KeyPlugins bit handles the switch between modes, the WireHandler portion handles the actual MIDI note on / off communication. 
+
+Currently the Arduino/Teensy build relies on the Arduino Keyboard Libraries (and the MIDI plugin uses the Arduino MIDI libraries). The PICO build relies on the TinyUSB implementation included in the PICO SDK, so behaviour is a little different (and a little more low level, the TinyUSBWireHandler has to handle more of the key state itself). The Arduino build should probably be moved over to TinyUSB as well for consistencies sakes. 
+
 **TODO** 
-* Setup a proper build system and move off the Arduino framework. At the moment I'm relying on Platform IO and its vscode plugin to build. Probably also involves writing some base level HID classes to replace the Arduino 'Keyboard' class which I'm currently using.
-* Find a better way of encapsulating the config somehow, at the moment it's defined in the main.cpp file and the pin configuration in the MatrixScan input device class (where, arguably, it belongs of course)
 * Currently if the plugins want to do something that involves pressing a key they have to call the wirehandler chain directly with the scancodes and key state. They should instead be sticking them onto an existing queue of keys, all of which are sent through the scan code plugins. This would facilitate some other behaviours around timing that would be useful. 
 * Allow chords to trigger plugins i.e. CTRL+ALT+P might printscreen etc etc
 
 ---
 
-Originally put together with vscode and its platformio plugin. Current Keyboard has a Teensy LC brain, Relevent platformio.ini is included in the repo.
+Originally put together with vscode and its platformio plugin. Current Keyboard has a Teensy LC brain, Relevent platformio.ini is included in the repo. As above, was branched to build out PICO support, and PICO branch has been merged back into main so should support PICO if built using appropriate PICO SDK.
 
 Initial design and simple firmware for the keyboard is here https://github.com/dairequinlan/the-keyboard 
 
