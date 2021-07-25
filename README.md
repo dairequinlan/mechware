@@ -21,6 +21,8 @@ Currently contains the following functional plugins,
 
 **Multi type plugins/** Plugins can extend more than one type. The MIDI Handler is a case in point, it extends the KeyPlugin and WireHandler subclasses,and added to both lists of plugins (wire and key plugins). The KeyPlugins bit handles the switch between modes, the WireHandler portion handles the actual MIDI note on / off communication. 
 
+----------------------------------------------------------------------------------
+
 Currently the Arduino/Teensy build relies on the Arduino Keyboard Libraries (and the MIDI plugin uses the Arduino MIDI libraries). The PICO build relies on the TinyUSB implementation included in the PICO SDK, so behaviour is a little different (and a little more low level, the TinyUSBWireHandler has to handle more of the key state itself). The Arduino build should probably be moved over to TinyUSB as well for consistencies sakes. 
 
 **TODO** 
