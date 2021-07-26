@@ -5,6 +5,8 @@ As per merge of PICO branch, will build for Teensy/Arduino on platformIO (edit p
 
 Individual board configurations, with keymaps, and input/plugin/wire plugin lists (as below) are in named directorys, and consist of a 'board.h' and a 'board.cpp' file. The named directory (i.e. at the time of writing there are 'teensy-65' and a 'split-pico' configurations) should be added to the include paths and the cpp file included in the build. The other named directories should be excluded if necessary. As part of the Teensy/Arduino build the 'boards' directory is excluded, and the specific teensy-65 folder included. As part of the cmake build the 'split-pico' directory is explicitly included in the include path, and the corresponding 'board.cpp' is added to the sources.
 
+--------------------------------------------------------------
+
 There are 3 different types of plugins, input, wire, and general plugins. The plugins are registered on startup, and run sequentially in the specified order, each one returning a boolean value indicating whether to terminate the chain at that point.
 
 **input/** contains device input classes, currently one which performs the scan of the keyboard matrix and does press/release detection and debounce. Further input classes might include I2C or Serial input classes, responsible for reading values from the other half of a split keyboard for example, and inserting them into the chain.
